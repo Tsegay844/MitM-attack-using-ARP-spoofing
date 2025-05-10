@@ -23,7 +23,7 @@ The three containers are connected together with a docker bridge network called 
 1. Install Docker, docker-compose, then run `docker-compose up -d`
 2. Connect to Alice's Firefox instance and visit `http://bob/`. This should show the actual website served by Bob
 3. You may also connect to alice via command line (`docker exec -it mitm_alice /bin/sh`) and see which MAC address corresponds to Bob's IP address
-4. Open 2 instances of bash on Eve's container (or, equivalently, use tmux with two splits) and run the `dig` command to discover the IPs of Alice and Bob:
+4. Open 2 instances of bash on Eve's container `docker exec -it mitm_eve /bin/sh` (or, equivalently, use tmux with two splits) and run the `dig` command to discover the IPs of Alice and Bob:
 
 ```
 $ dig alice

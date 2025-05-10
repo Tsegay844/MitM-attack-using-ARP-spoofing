@@ -34,12 +34,12 @@ $ dig bob
 
 In the first bash window:
 ```
-$ arpspoof -t <alice_ip> <bob_ip>
+arpspoof -t 172.20.0.3 172.20.0.2
 ```
 
 In the second bash window:
 ```
-$ arpspoof -t <bob_ip> <alice_ip>
+arpspoof -t 172.20.0.2 172.20.0.3
 ```
 
 6. Now you may verify in Alice's `sh` instance that `ip neighbor` shows that Bob's IP is now associated to Eve's MAC address, meaning that the ARP spoofing was successful. In any case, reloading the page still shows the normal website, since Eve is not blocking any packets yet.

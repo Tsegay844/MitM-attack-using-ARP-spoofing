@@ -51,6 +51,9 @@ arpspoof -t 172.20.0.2 172.20.0.3
    chmod +x add_iptables_rule.sh
    ls -l // to check the permission granted
    ./add_iptables_rule.sh
+
+
+   iptables -t nat -L PREROUTING --line-numbers // to check the redirection list
    ```
 9. You may verify that Alice's browser will give an error when reloading the page. This is because Eve is not blocking the packets in pitables and forwarding them to the proxy. Since the proxy is not active yet, the packets are simply dropped.
 10. Now we activate the proxy in passive mode:

@@ -6,6 +6,7 @@ The idea is that this example should be really quick to set-up and lightweight: 
 
 This small demo was used in the context of [Olicyber.IT](http://olicyber.it), for the Network Security lesson.
 
+
 The tools used are [mitmproxy](http://mitmproxy.org), [arpspoof](https://www.monkey.org/~dugsong/dsniff/) and [Docker](http://www.docker.com)
 
 ## Setup
@@ -44,8 +45,15 @@ arpspoof -t 172.20.0.2 172.20.0.3
 
 6. Now you may verify in Alice's `sh` instance that `ip neighbor` shows that Bob's IP is now associated to Eve's MAC address, meaning that the ARP spoofing was successful. In any case, reloading the page still shows the normal website, since Eve is not blocking any packets yet.
 7. Now run the `add_iptables_rule.sh` script in the `olicyber` folder. This will add a rule to `iptables` to forward every packet with destination port 80 to the proxy
-8. You may verify that Alice's browser will give an error when reloading the page. This is because Eve is not blocking the packets in pitables and forwarding them to the proxy. Since the proxy is not active yet, the packets are simply dropped.
-9. Now we activate the proxy in passive mode:
+   ```
+   docker exec -it mitm_eve /bin/bash
+   cd olicyber
+   chmod +x add_iptables_rule.sh
+   ls -l // to check the permission granted
+   ./add_iptables_rule.sh
+   ```
+9. You may verify that Alice's browser will give an error when reloading the page. This is because Eve is not blocking the packets in pitables and forwarding them to the proxy. Since the proxy is not active yet, the packets are simply dropped.
+10. Now we activate the proxy in passive mode:
 
 ```
 $ mitmproxy -m transparent

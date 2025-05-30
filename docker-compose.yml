@@ -11,6 +11,8 @@ services:
             - "5800:5800"
         networks:
             - mitm
+
+    # Eve is the MITM proxy server
     bob:
         image: aikain/simplehttpserver:0.1
         container_name: mitm_bob

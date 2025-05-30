@@ -1,61 +1,100 @@
-# Man in the Middle Docker Demo
+# 🚀 Man-in-the-Middle (MitM) Docker Demo
 
-This is a really simple demo to showcase a Man in the Middle (MitM) attack via ARP poisoning using Docker containers.
+A simple and lightweight demo showcasing a **Man-in-the-Middle (MitM)** attack via **ARP poisoning** using Docker containers. This project is designed for quick setup, requiring only Docker and `docker-compose`. Everything else is handled by the container configurations.
 
-The idea is that this example should be really quick to set-up and lightweight: the only softwares to download are Docker and docker-compose, everything else is managed by the container's configuration. Then, the only thing that remains is to run the attack itself.
+🔒 **Purpose:**  
+This demo was created as part of a Network Security course project.
 
-This small demo was used in the context of [Olicyber.IT](http://olicyber.it), for the Network Security lesson.
+---
 
-The tools used are [mitmproxy](http://mitmproxy.org), [arpspoof](https://www.monkey.org/~dugsong/dsniff/) and [Docker](http://www.docker.com)
+## 🛠 Tools Used
+- **Docker**
+- **docker-compose**
+- **mitmproxy**
+- **arpspoof**
 
-## Setup
+---
 
-There are 3 containers, Bob, Alice and Eve.
+## 📦 Project Setup
+The demo involves three Docker containers connected through a Docker bridge network named `mitm`:
 
-- **Bob**: is hosting an http server, serving the files contained in `bob_files`
-- **Alice**: is a container with Firefox running on it. To connect to firefox from the host, visit `http://localhost:5800`.
-- **Eve**: is a container meant to be used via bash. To run commands, just run `docker exec -it mitm_eve /bin/bash`. This container has the `eve_files` folder mounted on the container as `/olicyber` (TODO: change this folder's name)
+1. **Bob**: Hosts an HTTP server serving files from the `bob_files` directory.  
+2. **Alice**: Runs Firefox in a container. Access it from the host at [http://localhost:5800](http://localhost:5800).  
+3. **Eve**: The attacker container, used via bash. It has the `eve_files` folder mounted as `/olicyber` inside the container. *(TODO: Rename this folder to a more meaningful name.)*
 
-The three containers are connected together with a docker bridge network called `mitm`
+---
 
-## How to run the demo
+## 🔧 How to Run the Demo
 
-1. Install Docker, docker-compose, then run `docker-compose up -d`
-2. Connect to Alice's Firefox instance and visit `http://bob/`. This should show the actual website served by Bob
-3. You may also connect to alice via command line (`docker exec -it mitm_alice /bin/sh`) and see which MAC address corresponds to Bob's IP address
-4. Open 2 instances of bash on Eve's container (or, equivalently, use tmux with two splits) and run the `dig` command to discover the IPs of Alice and Bob:
+### 1. Set Up the Environment
+1. Install **Docker** and **docker-compose**.
+2. Start the containers:
+   ```bash
+   docker-compose up -d
 
-```
-$ dig alice
-$ dig bob
-```
+### 2. Verify Initial Setup
 
-5. With this information, now run arspoof twice, once for each bash instance.
+- Open **Alice's Firefox** at [http://localhost:5800](http://localhost:5800) and visit [http://bob/](http://bob/).  
+  You should see the website served by Bob's HTTP server.  
 
-In the first bash window:
-```
-$ arpspoof -t <alice_ip> <bob_ip>
-```
+- Verify Bob's MAC address from Alice's shell:
+   ```bash
+   docker exec -it mitm_alice /bin/sh
+   ip neighbor
+### 3. Discover IP Addresses
 
-In the second bash window:
-```
-$ arpspoof -t <bob_ip> <alice_ip>
-```
+- On Eve's container, open two bash instances:
+   ```bash
+   docker exec -it mitm_eve /bin/bash
 
-6. Now you may verify in Alice's `sh` instance that `ip neighbor` shows that Bob's IP is now associated to Eve's MAC address, meaning that the ARP spoofing was successful. In any case, reloading the page still shows the normal website, since Eve is not blocking any packets yet.
-7. Now run the `add_iptables_rule.sh` script in the `olicyber` folder. This will add a rule to `iptables` to forward every packet with destination port 80 to the proxy
-8. You may verify that Alice's browser will give an error when reloading the page. This is because Eve is not blocking the packets in pitables and forwarding them to the proxy. Since the proxy is not active yet, the packets are simply dropped.
-9. Now we activate the proxy in passive mode:
+- Run the dig command to get Alice's and Bob's IP addresses:
+    ```bash
+   dig alice
+   dig bob
 
-```
-$ mitmproxy -m transparent
-```
+### 4. Perform ARP Spoofing
 
-10. Reload the browser page: the honest page will show again, but mitmproxy will show that the request passed through Eve
-11. Now shut down the proxy and activate it again, this time with the script that modifies the contents of the page:
-```
-$ mitmproxy -m transparent -s /olicyber/proxy.py
-```
-12. Reload the browser page: the attacker has changed the contents of the website.
-13. To shut down everything use the `del_iptables_rul.sh` script in the `olicyber` folder to remove the iptables rule and turn off the two arpspoof instances
+In the two bash instances on Eve's container, run the following commands:
+- **Instance 1**:
+   ```bash
+   arpspoof -t <alice_ip> <bob_ip>
+- **Instance 2**:
+   ```bash
+   arpspoof -t <bob_ip> <alice_ip>
+- Check on Alice's shell that Bob's IP now maps to Eve's MAC address:
+  ```bash
+   ip neighbor
+  
+## 🔥 Simulating the Attack
 
+### Step 1: Forward Traffic Through Eve
+- Run the `add_iptables_rule.sh` script on Eve to forward traffic:
+   ```bash
+     /olicyber/add_iptables_rule.sh
+
+- Verify that Alice's browser now shows an error when reloading the page. This occurs because packets are being intercepted by Eve but dropped since the proxy is inactive.
+
+### Step 2: Activate the Proxy in Passive Mode
+
+- Start the proxy in passive mode:
+   ```bash
+   mitmproxy -m transparent
+
+- Reload the page in Alice's browser. The website will load normally, but Eve's mitmproxy instance will display the intercepted requests.
+
+### Step 3: Modify the Webpage
+
+- Restart the proxy with a custom script to alter the website content:
+  
+  ```bash
+   mitmproxy -m transparent -s /olicyber/proxy.py
+  
+- Reload the browser page, and you'll see the altered website content.
+
+## 🛑 Shutting Down
+
+- Remove the iptables rule:
+   ```bash
+   /olicyber/del_iptables_rule.sh
+   
+- Stop the ARP spoofing processes in Eve's bash instances.

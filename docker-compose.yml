@@ -19,10 +19,10 @@ services:
             - ./bob_files:/var/www
         networks:
             - mitm
-    eve:
+    eve1:
         privileged: true
         build: .
-        container_name: mitm_eve
+        container_name: mitm_eve_new
         volumes:
             - ./eve_files:/olicyber
         sysctls:

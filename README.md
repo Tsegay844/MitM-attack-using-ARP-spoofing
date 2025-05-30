@@ -1,6 +1,6 @@
 # 🚀 Man-in-the-Middle (MitM) Attack Practice using Docker
 
-A simple and lightweight demo showcasing a **Man-in-the-Middle (MitM)** attack via **ARP poisoning** using Docker containers. This project is designed for quick setup, requiring only Docker and `docker-compose`. Everything else is handled by the container configurations.
+A simple and lightweight demo showcasing a **Man-in-the-Middle (MitM)** attack via **ARP poisoning** using Docker containers. This demonstration is designed for quick setup, requiring only Docker and `docker-compose`. Everything else is handled by the container configurations.
 
 🔒 **Purpose:**  
 This practical example have been created to demonestrate _Man-in-the-Middle (MitM) attacke using ARP poisoning_ as part of **ICT Risk Assessment** Course examination.
@@ -15,7 +15,7 @@ This practical example have been created to demonestrate _Man-in-the-Middle (Mit
 
 ---
 
-## 📦 Project Setup
+## 📦 Environment Setup
 The demo involves three Docker containers connected through a Docker bridge network named `mitm`:
 
 1. **Bob**: Hosts an HTTP server serving files from the `bob_files` directory.  

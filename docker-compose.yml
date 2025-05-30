@@ -1,6 +1,15 @@
 version: "3.7"
 
+
+# This docker-compose file sets up a simple MITM proxy environment with three containers:
+# - Alice: A Firefox browser container
+# - Bob: A simple HTTP server container
+# - Eve: A custom container that runs mitmproxy in transparent mode
 services:
+    # Alice is a Firefox browser container that will be used to access Bob's files
+    # It is configured to run in a lightweight environment with a shared memory volume
+    # and exposes port 5800 for VNC access
+    # The image is based on jlesage/firefox, which provides a ready-to-use Firefox browser
     alice:
         image: jlesage/firefox
         container_name: mitm_alice
@@ -12,7 +21,8 @@ services:
         networks:
             - mitm
 
-    # Eve is the MITM proxy server
+    # Bob is a simple HTTP server that serves files from the ./bob_files directory
+    # This is where you can place files that Alice can access
     bob:
         image: aikain/simplehttpserver:0.1
         container_name: mitm_bob
@@ -21,6 +31,10 @@ services:
             - ./bob_files:/var/www
         networks:
             - mitm
+# Eve is a custom container that runs mitmproxy in transparent mode
+    # It is built from a Dockerfile in the current directory and has privileged access
+    # It also mounts a volume for Eve's files
+    # The sysctls are set to enable IP forwarding and disable redirects
     eve1:
         privileged: true
         build: .

@@ -18,6 +18,6 @@ RUN apt-get update && apt-get install -y \
 # Install specific versions of Werkzeug and mitmproxy
 RUN pip3 install "werkzeug<2.1.0" "mitmproxy==7.0.4"
 
-# Default command to keep the container running 
-# and allow for interactive debugging
+# Default command to keep the container running
+# Use a trap to keep the container alive
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

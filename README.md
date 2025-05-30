@@ -73,6 +73,10 @@ In the two bash instances on Eve's container, run the following commands:
    cd olicyber
    chmod +x add_iptables_rule.sh
    ./add_iptables_rule.sh
+
+  ```bash
+    /olicyber/add_iptables_rule.sh
+
    
 
 - Verify that Alice's browser now shows an error when reloading the page. This occurs because packets are being intercepted by Eve but dropped since the proxy is inactive.

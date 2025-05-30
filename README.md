@@ -39,13 +39,13 @@ The demo involves three Docker containers connected through a Docker bridge netw
 
 - Verify Bob's MAC address from Alice's shell:
    ```bash
-   docker exec -it mitm_alice /bin/sh
+   docker exec -it alice /bin/sh
    ip neighbor
 ### 3. Discover IP Addresses
 
 - On Eve's container, open two bash instances:
    ```bash
-   docker exec -it mitm_eve /bin/bash
+   docker exec -it eve /bin/bash
 
 - Run the dig command to get Alice's and Bob's IP addresses:
     ```bash

@@ -70,7 +70,10 @@ In the two bash instances on Eve's container, run the following commands:
 ### Step 1: Forward Traffic Through Eve
 - Run the `add_iptables_rule.sh` script on Eve to forward traffic:
    ```bash
-     /olicyber/add_iptables_rule.sh
+   cd olicyber
+   chmod +x add_iptables_rule.sh
+   ./add_iptables_rule.sh
+   
 
 - Verify that Alice's browser now shows an error when reloading the page. This occurs because packets are being intercepted by Eve but dropped since the proxy is inactive.
 

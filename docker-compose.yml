@@ -1,5 +1,10 @@
 version: "3.7"
 
+# this docker-compose set up all the containers needed for the MITM lab
+# It includes:
+# - Alice: a Firefox browser container 
+# - Bob: a simple HTTP server container
+# - Eve: a container running mitmproxy in transparent mode
 services:
     alice:
         image: jlesage/firefox

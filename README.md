@@ -93,7 +93,7 @@ In the two bash instances on Eve's container, run the following commands:
 - Restart the proxy with a custom script to alter the website content:
   
   ```bash
-mitmproxy -m transparent -s /olicyber/proxy.py
+  mitmproxy -m transparent -s /olicyber/proxy.py
   
 - Reload the browser page, and you'll see the altered website content.
 

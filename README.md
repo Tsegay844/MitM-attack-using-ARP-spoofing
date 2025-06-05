@@ -40,8 +40,12 @@ The demo involves three Docker containers connected through a Docker bridge netw
 - Verify Bob's MAC address from Alice's shell:
    ```bash
    docker exec -it alice /bin/sh
+
+- Check ARP cache
+  ```bash
    ip neighbor
 ### 3. Discover IP Addresses
+
 
 - On Eve's container, open two bash instances:
    ```bash
@@ -75,7 +79,10 @@ In the two bash instances on Eve's container, run the following commands:
    ./add_iptables_rule.sh
    #OR
    olicyber/add_iptables_rule.sh
-   
+OR
+- Run the `add_iptables_rule.sh` from root dir.
+   ```bash
+     /olicyber/add_iptables_rule.sh
    
 
 - Verify that Alice's browser now shows an error when reloading the page. This occurs because packets are being intercepted by Eve but dropped since the proxy is inactive.
